@@ -7,8 +7,8 @@ import allure
 class TestLoginCourier:
     @allure.title('Успешная авторизация курьера.')
     @allure.description('Проверяет, что курьер может авторизоваться.')
-    def test_courier_login_success(self, created_courier_credentials):
-        login_data = helpers.create_login_data(created_courier_credentials)
+    def test_courier_login_success(self, fully_registered_courier):
+        login_data = helpers.create_login_data(fully_registered_courier)
         login_response = api.login_courier(login_data)
 
         assert login_response.status_code == 200
@@ -17,8 +17,8 @@ class TestLoginCourier:
 
     @allure.title('Авторизация с неверным логином')
     @allure.description('Проверка, что система вернет ошибку, если неправильно указать логин при авторизации')
-    def test_courier_login_invalid_login(self, created_courier_credentials):
-        login_data = helpers.create_login_data(created_courier_credentials)
+    def test_courier_login_invalid_login(self, fully_registered_courier):
+        login_data = helpers.create_login_data(fully_registered_courier)
         new_login_data = helpers.generate_new_courier_personal_data()
         login_data['login'] = new_login_data['login']
         login_response = api.login_courier(login_data)
@@ -29,8 +29,8 @@ class TestLoginCourier:
 
     @allure.title('Авторизация с неверным паролем')
     @allure.description('Проверка, что система вернет ошибку, если неправильно указать пароль при авторизации')
-    def test_courier_login_invalid_password(self, created_courier_credentials):
-        login_data = helpers.create_login_data(created_courier_credentials)
+    def test_courier_login_invalid_password(self, fully_registered_courier):
+        login_data = helpers.create_login_data(fully_registered_courier)
         new_login_data = helpers.generate_new_courier_personal_data()
         login_data['password'] = new_login_data['password']
         login_response = api.login_courier(login_data)
@@ -41,8 +41,8 @@ class TestLoginCourier:
 
     @allure.title('Авторизация курьера без логина')
     @allure.description('Проверка, что система вернет ошибку, если не указать логин при авторизации')
-    def test_courier_login_empty_login(self, created_courier_credentials):
-        login_data = helpers.create_login_data(created_courier_credentials)
+    def test_courier_login_empty_login(self, fully_registered_courier):
+        login_data = helpers.create_login_data(fully_registered_courier)
         login_data['login'] = ''
         login_response = api.login_courier(login_data)
 
@@ -52,8 +52,8 @@ class TestLoginCourier:
 
     @allure.title('Авторизация курьера без пароля')
     @allure.description('Проверка, что система вернет ошибку, если не указать пароль при авторизации')
-    def test_courier_login_empty_password(self, created_courier_credentials):
-        login_data = helpers.create_login_data(created_courier_credentials)
+    def test_courier_login_empty_password(self, fully_registered_courier):
+        login_data = helpers.create_login_data(fully_registered_courier)
         login_data['password'] = ''
         login_response = api.login_courier(login_data)
 
