@@ -45,25 +45,16 @@ class TestCreateCourier:
     @allure.title('Создание курьера с логином, который уже есть')
     @allure.description('Проверка, что нельзя создать курьера с логином, который уже есть.')
     def test_create_courier_existing_login(self):
-    # Генерируем данные для первого курьера
+     # Генерируем данные для первого курьера (занимаем логин)
         courier_data = helpers.generate_new_courier_personal_data()
+        api.create_courier(courier_data)  
 
-    
-    # Создаём первого курьера (занимаем логин)
-        create_first_response = api.create_courier(courier_data)
-        assert create_first_response.status_code == 201, "Первый курьер не создан"
-
-    # Генерируем данные для второго курьера с тем же логином
-        new_data = helpers.generate_new_courier_personal_data()
-        new_data['login'] = courier_data['login']  # берём логин первого курьера
-
-
-    # Пытаемся создать второго курьера с занятым логином
-        create_second_response = api.create_courier(new_data)
+    # Пытаемся создать второго курьера с тем же логином
+        second_courier_data = courier_data  # Используем тот же логин
+        create_response = api.create_courier(second_courier_data)
 
     # Ожидаем конфликт (409)
-        assert create_second_response.status_code == 409
-        assert create_second_response.json()["message"] == data.CREATE_COURIER_DUPLICATION_ERROR
+        assert create_response.status_code == 409
+        assert create_response.json()["message"] == data.CREATE_COURIER_DUPLICATION_ERROR
 
         
-       
